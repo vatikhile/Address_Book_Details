@@ -35,6 +35,9 @@ class AddressBook {
                 obj.updateDetails(mobileNumber);
                 obj.addressBook();
                 break;
+            case 5.:
+                obj.printAddressBook();
+                break;
             default:
                 break;
         }
