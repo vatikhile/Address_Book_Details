@@ -18,13 +18,18 @@ class AddressBook {
                 console.log('\nRecord saved in address book......\n');
                 obj.addressBook();
                 break;
-                case 2.:
-                    obj.printAddressBook();
-                    var mobileno = readline.questionInt('Enter 10 digit mobile number : ');
-                    let result = obj.delPerson(mobileno);
-                    console.log(`${result}`);
-                    obj.addressBook();
-                    break;
+            case 2.:
+                obj.printAddressBook();
+                var mobileno = readline.questionInt('Enter 10 digit mobile number : ');
+                let result = obj.delPerson(mobileno);
+                console.log(`${result}`);
+                obj.addressBook();
+                break;
+            case 3.:
+                var mobileNumber = readline.questionInt('Enter 10 digit mobile number For search the Entry: ');
+                obj.Search(mobileNumber);
+                obj.addressBook();
+                break;
             default:
                 break;
         }
@@ -102,8 +107,8 @@ class AddressBook {
         }
 
     }
-      /******************Deleting entry from the address book******************* */
-      delPerson(mobile_number) {
+    /******************Deleting entry from the address book******************* */
+    delPerson(mobile_number) {
         var ch = 0, flag = false;
         for (let i = 0; i < this.addressbook.AddressBook.length; i++) {
             if (this.addressbook.AddressBook[i] == null) {
@@ -126,24 +131,54 @@ class AddressBook {
             return 'Entry not found in address book......'
         }
     }
-        /****************************Printing the address book.************************************** */
-        printAddressBook() {
-            var j = 1;
-            console.log('----------------------------------Address Book details-----------------------------------------\n');
-    
-            console.log('Sr.No.  First Name\tLast Name\t Mobile No.\t  City\t   State   \t ZIP code');
+    /***************Searching the Entry By enter Mobile Number ********************************/
+    Search(x) {
+
+        return new Promise((resolve, reject) => {
             for (let i = 0; i < this.addressbook.AddressBook.length; i++) {
                 if (this.addressbook.AddressBook[i] == null) {
                     continue;
                 }
-                console.log(j++ + '.\t' + this.addressbook.AddressBook[i].FirstName
-                    + '\t\t ' + this.addressbook.AddressBook[i].LastName
-                    + '\t\t' + this.addressbook.AddressBook[i].MobileNo
-                    + '\t ' + this.addressbook.AddressBook[i].City
-                    + '\t ' + this.addressbook.AddressBook[i].State
-                    + '\t ' + this.addressbook.AddressBook[i].ZipCode);
+
+                if (x == this.addressbook.AddressBook[i].MobileNo) {
+
+                    console.log('\t' + this.addressbook.AddressBook[i].FirstName
+                        + '\t\t ' + this.addressbook.AddressBook[i].LastName
+                        + '\t\t' + this.addressbook.AddressBook[i].MobileNo
+                        + '\t ' + this.addressbook.AddressBook[i].City
+                        + '\t ' + this.addressbook.AddressBook[i].State
+                        + '\t ' + this.addressbook.AddressBook[i].ZipCode);
+                    console.log("Entry is Found");
+                    resolve();
+                    break;
+                } else {
+
+                    reject();
+                }
             }
+        }).then(data => {
+            console.log(data);
         }
+        ).catch(error => console.log(error));
+    }
+    /****************************Printing the address book.************************************** */
+    printAddressBook() {
+        var j = 1;
+        console.log('----------------------------------Address Book details-----------------------------------------\n');
+
+        console.log('Sr.No.  First Name\tLast Name\t Mobile No.\t  City\t   State   \t ZIP code');
+        for (let i = 0; i < this.addressbook.AddressBook.length; i++) {
+            if (this.addressbook.AddressBook[i] == null) {
+                continue;
+            }
+            console.log(j++ + '.\t' + this.addressbook.AddressBook[i].FirstName
+                + '\t\t ' + this.addressbook.AddressBook[i].LastName
+                + '\t\t' + this.addressbook.AddressBook[i].MobileNo
+                + '\t ' + this.addressbook.AddressBook[i].City
+                + '\t ' + this.addressbook.AddressBook[i].State
+                + '\t ' + this.addressbook.AddressBook[i].ZipCode);
+        }
+    }
     saveData() {
         var json = JSON.stringify(this.addressbook, null, 2);
         fs.writeFileSync('./JSON/AddressBook.json', json);
