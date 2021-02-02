@@ -30,6 +30,11 @@ class AddressBook {
                 obj.Search(mobileNumber);
                 obj.addressBook();
                 break;
+            case 4.:
+                var mobileNumber = readline.questionInt('Enter 10 digit mobile number For update the Entry: ');
+                obj.updateDetails(mobileNumber);
+                obj.addressBook();
+                break;
             default:
                 break;
         }
@@ -160,6 +165,60 @@ class AddressBook {
             console.log(data);
         }
         ).catch(error => console.log(error));
+    }
+    /*************** Updating the Details Entry by Entering the Mobile Number ********************/
+    updateDetails(mobileNumber) {
+        var flag = false;
+        var addch = 0;
+        for (let i = 0; i < this.addressbook.AddressBook.length; i++) {
+            if (this.addressbook.AddressBook[i] == null) {
+                continue;
+            }
+            if (mobileNumber == this.addressbook.AddressBook[i].MobileNo) {
+                addch = i;
+                flag = true;
+            }
+        }
+        if (flag) {
+            var ch = readline.questionInt(`\nEnter Which detail you want to update : \n1. FirstName ::${this.addressbook.AddressBook[addch].FirstName}\n2. LastName ::${this.addressbook.AddressBook[addch].LastName}\n3. City ::${this.addressbook.AddressBook[addch].City} \n4. State ::${this.addressbook.AddressBook[addch].State} \n5. ZipCode ::${this.addressbook.AddressBook[addch].ZipCode} \n. Enter Choice which details You want to Modify \n`);
+            switch (ch) {
+                case 1.:
+                    obj.modifyData(addch, ch, 'FirstName')
+
+                    break;
+                case 2.:
+                    obj.modifyData(addch, ch, 'LastName')
+
+                    break;
+                case 3.:
+                    obj.modifyData(addch, ch, 'City')
+
+                    break;
+                case 4.:
+                    obj.modifyData(addch, ch, 'State')
+
+                    break;
+                case 4.:
+                    obj.modifyData(addch, ch, 'ZipCode')
+
+                    break;
+                default:
+                    console.log("Choose the Correct Option");
+                    break;
+            }
+
+        }
+
+    }
+    /* Assing the Modified data to Existing Data */
+    modifyData(addch, ch, name) {
+        var arr = ['FirstName', 'LastName', 'City', 'State', 'ZipCode'];
+        arr[ch - 1] = readline.question(`Change ${name} ${this.addressbook.AddressBook[addch][name]} to ::`);
+        this.addressbook.AddressBook[addch][name] = arr[ch - 1];
+        obj.printAddressBook()
+
+
+
     }
     /****************************Printing the address book.************************************** */
     printAddressBook() {
