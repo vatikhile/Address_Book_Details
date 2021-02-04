@@ -1,5 +1,7 @@
+
 const readline = require('readline-sync');
 const fs = require('fs');
+// const logger =require('../Logger')
 
 class AddressBook {
     constructor() {
@@ -10,7 +12,7 @@ class AddressBook {
     addressBook() {
 
         console.log('------------Address Book---------------');
-        console.log('\n1. Add new entry in address book.\n2. Delete entry from address book.\n3.Search Entry \n4.Update Entry \n5.Print address book.\n');
+        console.log('\n1. Add new entry in address book.\n2. Delete entry from address book.\n3.Search Entry \n4.Update Entry \n5.Sort Firstname \n6.Print address book.\n');
         var ch = readline.questionInt('Enter your choice : \n');
         switch (ch) {
             case 1.:
@@ -36,12 +38,17 @@ class AddressBook {
                 obj.addressBook();
                 break;
             case 5.:
+                obj.sortByFirstName();
+
+            case 6.:
                 obj.printAddressBook();
                 break;
             default:
                 break;
         }
     }
+
+
     /****************Adding new entry in the address book. ******************************** */
     addPerson() {
         var flag = false;
@@ -59,10 +66,14 @@ class AddressBook {
         isValid = false;
         while (!isValid) {
             var mobileno = readline.questionInt('Enter 10 digit mobile number : ');
-            console.log("vvv", mobileno);
+
             var PHONE_NUMBER_PATTERN = /(7|8|9)\d{9}/;
             if (mobileno.toString().match(PHONE_NUMBER_PATTERN)) {
+
                 isValid = true;
+            }
+            else {
+                console.log(`Invalid ${mobileno} Name`);
             }
         }
 
@@ -135,6 +146,7 @@ class AddressBook {
             return 'Entry Deleted from the file'
         }
         else {
+            // logger.info()
             console.log('Entry not found in address book......');
             return 'Entry not found in address book......'
         }
@@ -218,9 +230,17 @@ class AddressBook {
         var arr = ['FirstName', 'LastName', 'City', 'State', 'ZipCode'];
         arr[ch - 1] = readline.question(`Change ${name} ${this.addressbook.AddressBook[addch][name]} to ::`);
         this.addressbook.AddressBook[addch][name] = arr[ch - 1];
-        obj.printAddressBook()
+        obj.printAddressBook();
+        obj.saveData();
+    }
+    /*     Sort the FirstName in the address Book  */
+    sortByFirstName() {
 
+        this.addressbook.AddressBook.sort(function (a, b) {
+            return ('' + a.FirstName).localeCompare(b.FirstName);
+        });
 
+        obj.saveData();
 
     }
     /****************************Printing the address book.************************************** */
@@ -241,13 +261,12 @@ class AddressBook {
                 + '\t ' + this.addressbook.AddressBook[i].ZipCode);
         }
     }
+
+    /*****************************Saving data into address book.******************************* */
     saveData() {
         var json = JSON.stringify(this.addressbook, null, 2);
         fs.writeFileSync('./JSON/AddressBook.json', json);
     }
-
 }
-//Creating an object of the class.
 var obj = new AddressBook();
-//calling function.
-obj.addressBook();
+module.exports = new AddressBook();

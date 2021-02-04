@@ -1,0 +1,13 @@
+{
+    "scripts": {
+      "test": "mocha test"
+    },
+    "devDependencies": {
+      "chai": "^4.2.0",
+      "eslint": "^7.19.0",
+      "mocha": "^8.2.1"
+    },
+    "dependencies": {
+      "logger": "^0.0.1"
+    }
+  }
